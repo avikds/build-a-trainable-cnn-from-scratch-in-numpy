@@ -42,8 +42,10 @@ def one_hot(labels, num_classes):
     result[np.arange(labels.shape[0]), labels] = 1.0
     return result
 
-# Step 7 - gather_true_class_probs (not yet solved)
-# TODO: implement
+# Step 7 - gather_true_class_probs
+def gather_true_class_probs(probs, labels):
+    # Return the probability assigned to the true class for each sample.
+    return probs[np.arange(probs.shape[0]), labels]
 
 # Step 8 - cross_entropy_loss (not yet solved)
 # TODO: implement
