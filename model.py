@@ -489,8 +489,21 @@ def softmax_cross_entropy_forward(logits, y):
 
     return loss
 
-# Step 35 - softmax_cross_entropy_backward (not yet solved)
-# TODO: implement
+# Step 35 - softmax_cross_entropy_backward
+def softmax_cross_entropy_backward(logits, y):
+    # Compute numerically stable softmax probabilities.
+    probs = stable_softmax(logits)
+
+    # Convert labels to one-hot vectors.
+    targets = one_hot(y, logits.shape[1])
+
+    # Gradient of mean softmax cross-entropy.
+    dlogits = (probs - targets) / logits.shape[0]
+
+    # Normalize exact negative zeros to positive zeros.
+    dlogits[dlogits == 0.0] = 0.0
+
+    return dlogits
 
 # Step 36 - sgd_step (not yet solved)
 # TODO: implement
