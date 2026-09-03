@@ -850,8 +850,13 @@ def build_synthetic_image_dataset(
 
     return x, y
 
-# Step 53 - shuffle_indices (not yet solved)
-# TODO: implement
+# Step 53 - shuffle_indices
+def shuffle_indices(n, seed=0):
+    # Seed NumPy's global RNG for reproducibility.
+    np.random.seed(seed)
+
+    # Return a reproducible permutation of [0, n).
+    return np.random.permutation(n)
 
 # Step 54 - train_test_split (not yet solved)
 # TODO: implement
