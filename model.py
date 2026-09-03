@@ -545,8 +545,23 @@ def adam_step(param, grad, m, v, t, lr, beta_one, beta_two, eps):
 
     return new_param, new_m, new_v
 
-# Step 42 - init_conv_layer (not yet solved)
-# TODO: implement
+# Step 42 - init_conv_layer
+def init_conv_layer(out_channels, in_channels, kernel_size, seed=0):
+    # Each output unit sees all input channels across the kernel area.
+    fan_in = in_channels * kernel_size * kernel_size
+
+    weights = he_init(
+        (out_channels, in_channels, kernel_size, kernel_size),
+        fan_in=fan_in,
+        seed=seed
+    )
+
+    bias = init_zero_bias(out_channels)
+
+    return {
+        "W": weights,
+        "b": bias
+    }
 
 # Step 43 - init_linear_layer (not yet solved)
 # TODO: implement
