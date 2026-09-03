@@ -810,8 +810,13 @@ def lenet_backward(dlogits, caches):
         }
     }
 
-# Step 51 - lenet_predict (not yet solved)
-# TODO: implement
+# Step 51 - lenet_predict
+def lenet_predict(x, params):
+    # Run the full LeNet forward pass to obtain the logits.
+    logits, _ = lenet_forward(x, params)
+
+    # Return the predicted class index for each sample.
+    return argmax_rows(logits)
 
 # Step 52 - build_synthetic_image_dataset (not yet solved)
 # TODO: implement
