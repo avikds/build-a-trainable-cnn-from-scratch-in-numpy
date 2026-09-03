@@ -858,8 +858,24 @@ def shuffle_indices(n, seed=0):
     # Return a reproducible permutation of [0, n).
     return np.random.permutation(n)
 
-# Step 54 - train_test_split (not yet solved)
-# TODO: implement
+# Step 54 - train_test_split
+def train_test_split(x, y, test_fraction=0.2, seed=0):
+    # Generate one shuffled index order shared by both features and labels.
+    indices = shuffle_indices(x.shape[0], seed)
+
+    # Number of samples assigned to the test set.
+    test_size = int(x.shape[0] * test_fraction)
+
+    # The first test_size shuffled samples form the test set.
+    test_indices = indices[:test_size]
+    train_indices = indices[test_size:]
+
+    x_train = x[train_indices]
+    y_train = y[train_indices]
+    x_test = x[test_indices]
+    y_test = y[test_indices]
+
+    return x_train, y_train, x_test, y_test
 
 # Step 55 - iterate_minibatches (not yet solved)
 # TODO: implement
