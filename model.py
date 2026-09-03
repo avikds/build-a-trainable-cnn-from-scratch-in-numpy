@@ -983,8 +983,59 @@ def train_one_epoch(
 
     return params, opt_state, step_counter, losses
 
-# Step 58 - train_loop (not yet solved)
-# TODO: implement
+# Step 58 - train_loop
+def train_loop(
+    params,
+    x_train,
+    y_train,
+    num_epochs,
+    batch_size,
+    lr=1e-3,
+    beta_one=0.9,
+    beta_two=0.999,
+    eps=1e-8,
+    seed=0
+):
+    # Initialize Adam state with zero first and second moments
+    # matching every parameter in the model.
+    opt_state = {}
+
+    for layer_name in params:
+        opt_state[layer_name] = {}
+
+        for param_name in params[layer_name]:
+            param = params[layer_name][param_name]
+
+            opt_state[layer_name][param_name] = {
+                "m": np.zeros_like(param),
+                "v": np.zeros_like(param)
+            }
+
+    # Maintain one global Adam step counter across all epochs.
+    step_counter = 0
+
+    # Store all minibatch losses from all epochs.
+    loss_history = []
+
+    # Train for the requested number of epochs.
+    for epoch in range(num_epochs):
+        params, opt_state, step_counter, epoch_losses = train_one_epoch(
+            params,
+            opt_state,
+            x_train,
+            y_train,
+            batch_size,
+            lr,
+            beta_one,
+            beta_two,
+            eps,
+            step_counter,
+            seed=seed + epoch
+        )
+
+        loss_history.extend(epoch_losses)
+
+    return params, loss_history
 
 # Step 59 - evaluate (not yet solved)
 # TODO: implement
