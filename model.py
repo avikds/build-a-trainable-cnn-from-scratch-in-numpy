@@ -349,8 +349,19 @@ def maxpool2d_forward(x, kernel, stride):
 
     return out, cache
 
-# Step 23 - scatter_grad_window (not yet solved)
-# TODO: implement
+# Step 23 - scatter_grad_window
+def scatter_grad_window(grad_value, argmax_index, kernel):
+    # Create a zero-filled pooling window.
+    grad_window = np.zeros((kernel, kernel), dtype=float)
+
+    # Convert the flat row-major index into 2D coordinates.
+    row = argmax_index // kernel
+    col = argmax_index % kernel
+
+    # Place the upstream gradient at the argmax position.
+    grad_window[row, col] = grad_value
+
+    return grad_window
 
 # Step 24 - maxpool2d_backward (not yet solved)
 # TODO: implement
