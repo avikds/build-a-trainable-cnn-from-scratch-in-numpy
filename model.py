@@ -887,8 +887,57 @@ def iterate_minibatches(x, y, batch_size, seed=0):
         batch_indices = indices[start:start + batch_size]
         yield x[batch_indices], y[batch_indices]
 
-# Step 56 - train_step (not yet solved)
-# TODO: implement
+# Step 56 - train_step
+def train_step(params, opt_state, xb, yb, lr, beta_one, beta_two, eps, step):
+    # Forward pass.
+    logits, caches = lenet_forward(xb, params)
+
+    # Compute scalar loss.
+    loss = softmax_cross_entropy_forward(logits, yb)
+
+    # Gradient of the loss with respect to the logits.
+    dlogits = softmax_cross_entropy_backward(logits, yb)
+
+    # Backward pass through the entire network.
+    grads = lenet_backward(dlogits, caches)
+
+    # Create new dictionaries so the input params and optimizer state
+    # are not modified in place.
+    new_params = {}
+    new_opt_state = {}
+
+    # Update every parameter using Adam.
+    for layer_name in params:
+        new_params[layer_name] = {}
+        new_opt_state[layer_name] = {}
+
+        for param_name in params[layer_name]:
+            param = params[layer_name][param_name]
+            grad = grads[layer_name][
+                "dW" if param_name == "W" else "db"
+            ]
+
+            state = opt_state[layer_name][param_name]
+
+            new_param, new_m, new_v = adam_step(
+                param,
+                grad,
+                state["m"],
+                state["v"],
+                step,
+                lr,
+                beta_one,
+                beta_two,
+                eps
+            )
+
+            new_params[layer_name][param_name] = new_param
+            new_opt_state[layer_name][param_name] = {
+                "m": new_m,
+                "v": new_v
+            }
+
+    return new_params, new_opt_state, loss
 
 # Step 57 - train_one_epoch (not yet solved)
 # TODO: implement
