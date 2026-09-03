@@ -520,8 +520,10 @@ def adam_update_v(v, grad, beta_two):
     # Update Adam's second moment estimate using the squared gradient.
     return beta_two * v + (1.0 - beta_two) * (grad ** 2)
 
-# Step 39 - adam_bias_correct (not yet solved)
-# TODO: implement
+# Step 39 - adam_bias_correct
+def adam_bias_correct(moment, beta, t):
+    # Correct the bias caused by zero initialization of Adam's moment estimate.
+    return moment / (1.0 - beta ** t)
 
 # Step 40 - adam_param_step (not yet solved)
 # TODO: implement
