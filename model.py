@@ -146,8 +146,56 @@ def im2col(images, kernel_h, kernel_w, stride, padding):
 
     return cols
 
-# Step 16 - col2im (not yet solved)
-# TODO: implement
+# Step 16 - col2im
+def col2im(cols, input_shape, kernel_h, kernel_w, stride, padding):
+    # Unpack the original input shape.
+    n, c, h, w = input_shape
+
+    # Compute the output spatial dimensions.
+    out_h = output_spatial_size(h, kernel_h, stride, padding)
+    out_w = output_spatial_size(w, kernel_w, stride, padding)
+
+    # Accumulate into a padded tensor so that overlapping patches
+    # contribute to the same spatial locations.
+    padded_h = h + 2 * padding
+    padded_w = w + 2 * padding
+
+    images_padded = np.zeros(
+        (n, c, padded_h, padded_w),
+        dtype=cols.dtype
+    )
+
+    row = 0
+
+    # Patches are ordered by sample, then output row, then output column,
+    # matching the ordering used by im2col.
+    for i in range(n):
+        for oh in range(out_h):
+            h_start = oh * stride
+            h_end = h_start + kernel_h
+
+            for ow in range(out_w):
+                w_start = ow * stride
+                w_end = w_start + kernel_w
+
+                patch = cols[row].reshape(c, kernel_h, kernel_w)
+
+                # Accumulate because overlapping patches contribute
+                # to the same elements of the image.
+                images_padded[
+                    i,
+                    :,
+                    h_start:h_end,
+                    w_start:w_end
+                ] += patch
+
+                row += 1
+
+    # Remove the padding before returning.
+    if padding > 0:
+        return images_padded[:, :, padding:-padding, padding:-padding]
+
+    return images_padded
 
 # Step 17 - conv2d_forward (not yet solved)
 # TODO: implement
