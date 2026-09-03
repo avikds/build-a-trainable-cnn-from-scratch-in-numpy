@@ -771,8 +771,44 @@ def backward_classifier_block(dlogits, cache):
         }
     }
 
-# Step 50 - lenet_backward (not yet solved)
-# TODO: implement
+# Step 50 - lenet_backward
+def lenet_backward(dlogits, caches):
+    # Backpropagate through the classifier block.
+    classifier_grads = backward_classifier_block(
+        dlogits,
+        caches["classifier"]
+    )
+
+    # Backpropagate through the second convolutional block.
+    block2_dx, block2_dW, block2_db = backward_conv_block(
+        classifier_grads["dx"],
+        caches["block2"]
+    )
+
+    # Backpropagate through the first convolutional block.
+    block1_dx, block1_dW, block1_db = backward_conv_block(
+        block2_dx,
+        caches["block1"]
+    )
+
+    return {
+        "conv1": {
+            "dW": block1_dW,
+            "db": block1_db
+        },
+        "conv2": {
+            "dW": block2_dW,
+            "db": block2_db
+        },
+        "fc1": {
+            "dW": classifier_grads["fc1"]["dW"],
+            "db": classifier_grads["fc1"]["db"]
+        },
+        "fc2": {
+            "dW": classifier_grads["fc2"]["dW"],
+            "db": classifier_grads["fc2"]["db"]
+        }
+    }
 
 # Step 51 - lenet_predict (not yet solved)
 # TODO: implement
