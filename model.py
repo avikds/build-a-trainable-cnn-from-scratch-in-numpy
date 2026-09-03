@@ -453,8 +453,12 @@ def linear_grad_input(d_out, cache):
     # dL/dX = dL/dY @ W.T
     return d_out @ cache["weights"].T
 
-# Step 31 - linear_grad_weights (not yet solved)
-# TODO: implement
+# Step 31 - linear_grad_weights
+def linear_grad_weights(x, dout):
+    """Gradient of loss wrt linear-layer weights W of shape (D_in, D_out)."""
+    # For Y = X @ W + b:
+    # dL/dW = X.T @ dL/dY
+    return x.T @ dout
 
 # Step 32 - linear_grad_bias (not yet solved)
 # TODO: implement
