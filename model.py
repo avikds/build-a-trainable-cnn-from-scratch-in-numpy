@@ -233,8 +233,38 @@ def conv2d_forward(x, weights, bias, stride, padding):
 
     return output, cache
 
-# Step 18 - conv2d_grad_input (not yet solved)
-# TODO: implement
+# Step 18 - conv2d_grad_input
+def conv2d_grad_input(d_out, cache):
+    # Retrieve cached values from the forward pass.
+    weights = cache["weights"]
+    x_shape = cache["x_shape"]
+    stride = cache["stride"]
+    padding = cache["padding"]
+    kernel_h = cache["kernel_h"]
+    kernel_w = cache["kernel_w"]
+
+    n, c_out, out_h, out_w = d_out.shape
+    c_in = x_shape[1]
+
+    # Rearrange upstream gradients to match the im2col row ordering:
+    # sample, output row, output column, output channel.
+    d_out_2d = d_out.transpose(0, 2, 3, 1).reshape(n * out_h * out_w, c_out)
+
+    # Each input patch receives gradients from every output channel.
+    weights_2d = weights.reshape(c_out, c_in * kernel_h * kernel_w)
+    d_cols = d_out_2d @ weights_2d
+
+    # Fold the patch gradients back into the original image layout.
+    dx = col2im(
+        d_cols,
+        x_shape,
+        kernel_h,
+        kernel_w,
+        stride,
+        padding
+    )
+
+    return dx
 
 # Step 19 - conv2d_grad_weights (not yet solved)
 # TODO: implement
