@@ -306,8 +306,48 @@ def conv2d_backward(d_out, cache):
 
     return dx, dW, db
 
-# Step 22 - maxpool2d_forward (not yet solved)
-# TODO: implement
+# Step 22 - maxpool2d_forward
+def maxpool2d_forward(x, kernel, stride):
+    # Unpack input dimensions.
+    n, c, h, w = x.shape
+
+    # Max pooling uses no padding.
+    out_h = output_spatial_size(h, kernel, stride, 0)
+    out_w = output_spatial_size(w, kernel, stride, 0)
+
+    # Allocate output and cache the flat argmax index for each window.
+    out = np.empty((n, c, out_h, out_w), dtype=x.dtype)
+    argmax = np.empty((n, c, out_h, out_w), dtype=np.int64)
+
+    # Apply the pooling window independently to each sample and channel.
+    for i in range(n):
+        for ch in range(c):
+            for oh in range(out_h):
+                h_start = oh * stride
+                h_end = h_start + kernel
+
+                for ow in range(out_w):
+                    w_start = ow * stride
+                    w_end = w_start + kernel
+
+                    window = x[i, ch, h_start:h_end, w_start:w_end]
+
+                    # Flatten the window so argmax is the required
+                    # in-window index in [0, kernel * kernel).
+                    flat_window = window.reshape(-1)
+                    idx = np.argmax(flat_window)
+
+                    out[i, ch, oh, ow] = flat_window[idx]
+                    argmax[i, ch, oh, ow] = idx
+
+    cache = {
+        "x_shape": x.shape,
+        "argmax": argmax,
+        "kernel": kernel,
+        "stride": stride,
+    }
+
+    return out, cache
 
 # Step 23 - scatter_grad_window (not yet solved)
 # TODO: implement
