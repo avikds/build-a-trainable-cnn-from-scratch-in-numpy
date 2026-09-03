@@ -563,8 +563,23 @@ def init_conv_layer(out_channels, in_channels, kernel_size, seed=0):
         "b": bias
     }
 
-# Step 43 - init_linear_layer (not yet solved)
-# TODO: implement
+# Step 43 - init_linear_layer
+def init_linear_layer(in_features, out_features, seed=0):
+    # For a linear layer, each output unit receives all in_features inputs.
+    fan_in = in_features
+
+    weights = he_init(
+        (in_features, out_features),
+        fan_in=fan_in,
+        seed=seed
+    )
+
+    bias = init_zero_bias(out_features)
+
+    return {
+        "W": weights,
+        "b": bias
+    }
 
 # Step 44 - init_lenet (not yet solved)
 # TODO: implement
