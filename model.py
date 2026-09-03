@@ -433,8 +433,18 @@ def flatten_backward(d_out, cache):
     # Reshape the upstream gradient back to the original feature-map shape.
     return d_out.reshape(cache["x_shape"])
 
-# Step 29 - linear_forward (not yet solved)
-# TODO: implement
+# Step 29 - linear_forward
+def linear_forward(x, weights, bias):
+    # Compute the affine transformation.
+    out = x @ weights + bias
+
+    # Cache the tensors needed for the backward pass.
+    cache = {
+        "x": x,
+        "weights": weights
+    }
+
+    return out, cache
 
 # Step 30 - linear_grad_input (not yet solved)
 # TODO: implement
