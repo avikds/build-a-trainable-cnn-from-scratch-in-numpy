@@ -618,8 +618,30 @@ def init_lenet(in_channels, num_classes, seed=0):
 
     return params
 
-# Step 45 - forward_conv_block (not yet solved)
-# TODO: implement
+# Step 45 - forward_conv_block
+def forward_conv_block(x, W, b, pool_size, stride, pad):
+    # Convolution layer.
+    conv_out, conv_cache = conv2d_forward(
+        x, W, b, stride, pad
+    )
+
+    # ReLU activation.
+    relu_out, relu_cache = relu_forward(conv_out)
+
+    # Non-overlapping max pooling.
+    pool_out, pool_cache = maxpool2d_forward(
+        relu_out,
+        kernel=pool_size,
+        stride=pool_size
+    )
+
+    cache = {
+        "conv_cache": conv_cache,
+        "relu_cache": relu_cache,
+        "pool_cache": pool_cache
+    }
+
+    return pool_out, cache
 
 # Step 46 - forward_classifier_block (not yet solved)
 # TODO: implement
