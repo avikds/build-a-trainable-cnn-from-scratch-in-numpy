@@ -297,8 +297,14 @@ def conv2d_grad_bias(d_out):
     # Sum over the batch and spatial dimensions, leaving one value per output channel.
     return np.sum(d_out, axis=(0, 2, 3))
 
-# Step 21 - conv2d_backward (not yet solved)
-# TODO: implement
+# Step 21 - conv2d_backward
+def conv2d_backward(d_out, cache):
+    # Compute all convolution gradients using the corresponding helpers.
+    dx = conv2d_grad_input(d_out, cache)
+    dW = conv2d_grad_weights(d_out, cache)
+    db = conv2d_grad_bias(d_out)
+
+    return dx, dW, db
 
 # Step 22 - maxpool2d_forward (not yet solved)
 # TODO: implement
