@@ -266,8 +266,31 @@ def conv2d_grad_input(d_out, cache):
 
     return dx
 
-# Step 19 - conv2d_grad_weights (not yet solved)
-# TODO: implement
+# Step 19 - conv2d_grad_weights
+def conv2d_grad_weights(d_out, cache):
+    # Retrieve cached values.
+    cols = cache["cols"]
+    weights = cache["weights"]
+    kernel_h = cache["kernel_h"]
+    kernel_w = cache["kernel_w"]
+
+    n, c_out, out_h, out_w = d_out.shape
+
+    # Match the row ordering used by im2col:
+    # sample, output row, output column, output channel.
+    d_out_2d = d_out.transpose(0, 2, 3, 1).reshape(
+        n * out_h * out_w,
+        c_out
+    )
+
+    # Forward uses:
+    # output_2d = cols @ weights_2d.T + bias
+    # Therefore:
+    # dW_2d = d_out_2d.T @ cols
+    d_weights_2d = d_out_2d.T @ cols
+
+    # Restore the original weight tensor shape.
+    return d_weights_2d.reshape(weights.shape)
 
 # Step 20 - conv2d_grad_bias (not yet solved)
 # TODO: implement
