@@ -363,8 +363,41 @@ def scatter_grad_window(grad_value, argmax_index, kernel):
 
     return grad_window
 
-# Step 24 - maxpool2d_backward (not yet solved)
-# TODO: implement
+# Step 24 - maxpool2d_backward
+def maxpool2d_backward(d_out, cache):
+    # Retrieve the original pooling configuration.
+    x_shape = cache["x_shape"]
+    argmax = cache["argmax"]
+    kernel = cache["kernel"]
+    stride = cache["stride"]
+
+    n, c, h, w = x_shape
+    _, _, out_h, out_w = d_out.shape
+
+    # Initialize the input gradient.
+    dx = np.zeros(x_shape, dtype=d_out.dtype)
+
+    # Route each upstream gradient to the cached maximum position.
+    for i in range(n):
+        for ch in range(c):
+            for oh in range(out_h):
+                h_start = oh * stride
+                h_end = h_start + kernel
+
+                for ow in range(out_w):
+                    w_start = ow * stride
+                    w_end = w_start + kernel
+
+                    grad_window = scatter_grad_window(
+                        d_out[i, ch, oh, ow],
+                        argmax[i, ch, oh, ow],
+                        kernel
+                    )
+
+                    # Accumulate because pooling windows may overlap.
+                    dx[i, ch, h_start:h_end, w_start:w_end] += grad_window
+
+    return dx
 
 # Step 25 - relu_forward (not yet solved)
 # TODO: implement
