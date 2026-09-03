@@ -70,6 +70,26 @@ python scaffold.py
 - [x] **58.** train_loop
 - [x] **59.** evaluate
 
----
+## Results
 
-Built on Deep-ML.
+```
+Dataset shapes: x=(64, 1, 28, 28), y=(64,)
+Label distribution: [19 22 23]
+Train: (48, 1, 28, 28), Test: (16, 1, 28, 28)
+Parameter tensors:
+  conv1.W: shape=(6, 1, 5, 5)
+  conv1.b: shape=(6,)
+  conv2.W: shape=(16, 6, 5, 5)
+  conv2.b: shape=(16,)
+  fc1.W: shape=(256, 120)
+  fc1.b: shape=(120,)
+  fc2.W: shape=(120, 3)
+  fc2.b: shape=(3,)
+Initial mini-batch loss: 3.2760, accuracy: 0.125
+Training steps: 9
+First loss: 2.6645, last loss: 0.1578
+Train accuracy: 0.938
+Test  accuracy: 0.750
+Sample predictions: [1, 1, 0, 2, 0, 2, 0, 1]
+Sample labels:      [2, 2, 0, 2, 0, 2, 0, 1]
+```
