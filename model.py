@@ -98,8 +98,11 @@ def pad_2d(images, pad):
         constant_values=0
     )
 
-# Step 14 - output_spatial_size (not yet solved)
-# TODO: implement
+# Step 14 - output_spatial_size
+def output_spatial_size(input_size, kernel, stride, padding):
+    # Return the output spatial dimension for a valid integer-producing
+    # convolution or pooling configuration.
+    return int((input_size + 2 * padding - kernel) / stride + 1)
 
 # Step 15 - im2col (not yet solved)
 # TODO: implement
