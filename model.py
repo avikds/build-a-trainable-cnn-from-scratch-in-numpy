@@ -530,8 +530,20 @@ def adam_param_step(param, m_hat, v_hat, lr, eps):
     # Apply one Adam parameter update without modifying param in place.
     return param - lr * m_hat / (np.sqrt(v_hat) + eps)
 
-# Step 41 - adam_step (not yet solved)
-# TODO: implement
+# Step 41 - adam_step
+def adam_step(param, grad, m, v, t, lr, beta_one, beta_two, eps):
+    # Update the first and second moment estimates.
+    new_m = adam_update_m(m, grad, beta_one)
+    new_v = adam_update_v(v, grad, beta_two)
+
+    # Bias-correct the moment estimates.
+    m_hat = adam_bias_correct(new_m, beta_one, t)
+    v_hat = adam_bias_correct(new_v, beta_two, t)
+
+    # Apply the Adam parameter update.
+    new_param = adam_param_step(param, m_hat, v_hat, lr, eps)
+
+    return new_param, new_m, new_v
 
 # Step 42 - init_conv_layer (not yet solved)
 # TODO: implement
