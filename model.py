@@ -104,8 +104,47 @@ def output_spatial_size(input_size, kernel, stride, padding):
     # convolution or pooling configuration.
     return int((input_size + 2 * padding - kernel) / stride + 1)
 
-# Step 15 - im2col (not yet solved)
-# TODO: implement
+# Step 15 - im2col
+def im2col(images, kernel_h, kernel_w, stride, padding):
+    # Zero-pad the input spatial dimensions first.
+    padded = pad_2d(images, padding)
+
+    n, c, h, w = images.shape
+
+    # Compute output spatial dimensions.
+    out_h = output_spatial_size(h, kernel_h, stride, padding)
+    out_w = output_spatial_size(w, kernel_w, stride, padding)
+
+    # Allocate the column matrix.
+    cols = np.empty(
+        (n * out_h * out_w, c * kernel_h * kernel_w),
+        dtype=images.dtype
+    )
+
+    row = 0
+
+    # Order patches by sample, then output row, then output column.
+    # Within each patch, values are stored channel-major.
+    for i in range(n):
+        for oh in range(out_h):
+            h_start = oh * stride
+            h_end = h_start + kernel_h
+
+            for ow in range(out_w):
+                w_start = ow * stride
+                w_end = w_start + kernel_w
+
+                patch = padded[
+                    i,
+                    :,
+                    h_start:h_end,
+                    w_start:w_end
+                ]
+
+                cols[row] = patch.reshape(-1)
+                row += 1
+
+    return cols
 
 # Step 16 - col2im (not yet solved)
 # TODO: implement
