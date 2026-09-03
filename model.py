@@ -13,8 +13,10 @@ def argmax_rows(matrix):
     # Return the column index of the largest element in each row.
     return np.argmax(matrix, axis=1)
 
-# Step 2 - row_max (not yet solved)
-# TODO: implement
+# Step 2 - row_max
+def row_max(matrix):
+    # Return the maximum value of each row, preserving the row dimension.
+    return np.max(matrix, axis=1, keepdims=True)
 
 # Step 3 - row_sum (not yet solved)
 # TODO: implement
