@@ -818,8 +818,37 @@ def lenet_predict(x, params):
     # Return the predicted class index for each sample.
     return argmax_rows(logits)
 
-# Step 52 - build_synthetic_image_dataset (not yet solved)
-# TODO: implement
+# Step 52 - build_synthetic_image_dataset
+def build_synthetic_image_dataset(
+    num_samples,
+    num_classes,
+    image_size,
+    in_channels=1,
+    seed=0
+):
+    # Use one RNG for the entire dataset generation process.
+    rng = np.random.default_rng(seed)
+
+    # Draw integer class labels uniformly.
+    y = rng.integers(
+        low=0,
+        high=num_classes,
+        size=num_samples
+    )
+
+    # Draw standard-normal image pixels.
+    x = rng.standard_normal(
+        size=(num_samples, in_channels, image_size, image_size)
+    )
+
+    # Shift each image according to its class so that the classes
+    # become linearly separable.
+    class_center = (num_classes - 1) / 2.0
+    shifts = y - class_center
+
+    x += shifts[:, None, None, None]
+
+    return x, y
 
 # Step 53 - shuffle_indices (not yet solved)
 # TODO: implement
