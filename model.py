@@ -460,8 +460,11 @@ def linear_grad_weights(x, dout):
     # dL/dW = X.T @ dL/dY
     return x.T @ dout
 
-# Step 32 - linear_grad_bias (not yet solved)
-# TODO: implement
+# Step 32 - linear_grad_bias
+def linear_grad_bias(dout):
+    # Since the bias is broadcast across the batch,
+    # sum the upstream gradients over the batch dimension.
+    return np.sum(dout, axis=0)
 
 # Step 33 - linear_backward (not yet solved)
 # TODO: implement
