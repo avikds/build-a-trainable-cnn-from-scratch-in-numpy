@@ -197,8 +197,41 @@ def col2im(cols, input_shape, kernel_h, kernel_w, stride, padding):
 
     return images_padded
 
-# Step 17 - conv2d_forward (not yet solved)
-# TODO: implement
+# Step 17 - conv2d_forward
+def conv2d_forward(x, weights, bias, stride, padding):
+    # Unpack dimensions.
+    n, c_in, h, w = x.shape
+    c_out, _, kernel_h, kernel_w = weights.shape
+
+    # Unroll input patches using im2col.
+    cols = im2col(x, kernel_h, kernel_w, stride, padding)
+
+    # Reshape weights so each output channel corresponds to one row.
+    weights_2d = weights.reshape(c_out, -1)
+
+    # Perform the convolution as a matrix multiplication and add bias.
+    output_2d = cols @ weights_2d.T + bias
+
+    # Compute output spatial dimensions.
+    out_h = output_spatial_size(h, kernel_h, stride, padding)
+    out_w = output_spatial_size(w, kernel_w, stride, padding)
+
+    # Restore the expected 4D feature-map layout.
+    output = output_2d.reshape(n, out_h, out_w, c_out)
+    output = output.transpose(0, 3, 1, 2)
+
+    # Cache values required for the backward pass.
+    cache = {
+        "x_shape": x.shape,
+        "weights": weights,
+        "cols": cols,
+        "stride": stride,
+        "padding": padding,
+        "kernel_h": kernel_h,
+        "kernel_w": kernel_w,
+    }
+
+    return output, cache
 
 # Step 18 - conv2d_grad_input (not yet solved)
 # TODO: implement
