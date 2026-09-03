@@ -67,8 +67,18 @@ def he_std(fan_in):
     # Return the He initialization standard deviation sqrt(2 / fan_in).
     return float(math.sqrt(2.0 / fan_in))
 
-# Step 11 - he_init (not yet solved)
-# TODO: implement
+# Step 11 - he_init
+def he_init(shape, fan_in, seed):
+    # Seed NumPy's global RNG for reproducibility.
+    np.random.seed(seed)
+
+    # Sample weights from a zero-mean normal distribution
+    # with the He initialization standard deviation.
+    return np.random.normal(
+        loc=0.0,
+        scale=he_std(fan_in),
+        size=shape
+    ).astype(np.float64)
 
 # Step 12 - init_zero_bias (not yet solved)
 # TODO: implement
