@@ -581,8 +581,42 @@ def init_linear_layer(in_features, out_features, seed=0):
         "b": bias
     }
 
-# Step 44 - init_lenet (not yet solved)
-# TODO: implement
+# Step 44 - init_lenet
+def init_lenet(in_channels, num_classes, seed=0):
+    # 28x28 input:
+    # conv1 (5x5, valid) -> 24x24
+    # pool2 (2x2, stride 2) -> 12x12
+    # conv2 (5x5, valid) -> 8x8
+    # pool2 (2x2, stride 2) -> 4x4
+    # Therefore fc1 receives 16 * 4 * 4 = 256 features.
+    fc1_in_features = 16 * 4 * 4
+
+    params = {
+        "conv1": init_conv_layer(
+            out_channels=6,
+            in_channels=in_channels,
+            kernel_size=5,
+            seed=seed
+        ),
+        "conv2": init_conv_layer(
+            out_channels=16,
+            in_channels=6,
+            kernel_size=5,
+            seed=seed + 1
+        ),
+        "fc1": init_linear_layer(
+            in_features=fc1_in_features,
+            out_features=120,
+            seed=seed + 2
+        ),
+        "fc2": init_linear_layer(
+            in_features=120,
+            out_features=num_classes,
+            seed=seed + 3
+        )
+    }
+
+    return params
 
 # Step 45 - forward_conv_block (not yet solved)
 # TODO: implement
