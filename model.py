@@ -416,8 +416,17 @@ def relu_backward(d_out, cache):
     x = cache["x"]
     return d_out * (x > 0)
 
-# Step 27 - flatten_forward (not yet solved)
-# TODO: implement
+# Step 27 - flatten_forward
+def flatten_forward(x):
+    # Cache the original shape for the backward pass.
+    cache = {
+        "x_shape": x.shape
+    }
+
+    # Flatten each sample while preserving the batch dimension.
+    out = x.reshape(x.shape[0], -1)
+
+    return out, cache
 
 # Step 28 - flatten_backward (not yet solved)
 # TODO: implement
