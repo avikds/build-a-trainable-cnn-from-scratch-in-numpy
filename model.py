@@ -466,8 +466,14 @@ def linear_grad_bias(dout):
     # sum the upstream gradients over the batch dimension.
     return np.sum(dout, axis=0)
 
-# Step 33 - linear_backward (not yet solved)
-# TODO: implement
+# Step 33 - linear_backward
+def linear_backward(dout, cache):
+    # Compute all gradients using the cached forward values.
+    dx = linear_grad_input(dout, cache)
+    dW = linear_grad_weights(cache["x"], dout)
+    db = linear_grad_bias(dout)
+
+    return dx, dW, db
 
 # Step 34 - softmax_cross_entropy_forward (not yet solved)
 # TODO: implement
