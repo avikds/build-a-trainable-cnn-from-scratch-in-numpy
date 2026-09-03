@@ -711,8 +711,27 @@ def lenet_forward(x, params):
 
     return logits, caches
 
-# Step 48 - backward_conv_block (not yet solved)
-# TODO: implement
+# Step 48 - backward_conv_block
+def backward_conv_block(dout, cache):
+    # Backpropagate through max pooling.
+    d_relu = maxpool2d_backward(
+        dout,
+        cache["pool_cache"]
+    )
+
+    # Backpropagate through ReLU.
+    d_conv = relu_backward(
+        d_relu,
+        cache["relu_cache"]
+    )
+
+    # Backpropagate through the convolution.
+    dx, dW, db = conv2d_backward(
+        d_conv,
+        cache["conv_cache"]
+    )
+
+    return dx, dW, db
 
 # Step 49 - backward_classifier_block (not yet solved)
 # TODO: implement
