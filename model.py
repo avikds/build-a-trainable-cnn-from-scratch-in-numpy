@@ -510,8 +510,10 @@ def sgd_step(param, grad, lr):
     # Perform one vanilla SGD update.
     return param - lr * grad
 
-# Step 37 - adam_update_m (not yet solved)
-# TODO: implement
+# Step 37 - adam_update_m
+def adam_update_m(m, grad, beta_one):
+    # Update Adam's first moment estimate.
+    return beta_one * m + (1.0 - beta_one) * grad
 
 # Step 38 - adam_update_v (not yet solved)
 # TODO: implement
