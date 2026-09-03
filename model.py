@@ -1037,6 +1037,11 @@ def train_loop(
 
     return params, loss_history
 
-# Step 59 - evaluate (not yet solved)
-# TODO: implement
+# Step 59 - evaluate
+def evaluate(params, x, y):
+    # Run the trained model to obtain predicted class indices.
+    predictions = lenet_predict(x, params)
+
+    # Return the fraction of correct predictions as a Python float.
+    return float(np.mean(predictions == y))
 
